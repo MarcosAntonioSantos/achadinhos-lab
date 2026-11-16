@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achadinhos — Dashboard de métricas</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0F0F12; --card:#1A1A1F; --accent:#EE4D2D; --gold:#FFD60A; --text:#F5F5F7; --muted:#9A9AA3; --border:#2A2A32; --green:#22C55E; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); padding:24px; }
+  h1 { font-family:'Anton',sans-serif; font-size:28px; margin-bottom:4px; }
+  .sub { color:var(--muted); font-size:13px; margin-bottom:24px; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:24px; }
+  .kpi { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .kpi .label { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+  .kpi .value { font-family:'Anton',sans-serif; font-size:28px; margin-top:6px; }
+  .kpi .delta { font-size:12px; margin-top:4px; color:var(--green); }
+  .section { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; }
+  .section h2 { font-size:16px; margin-bottom:12px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { padding:8px 10px; text-align:left; border-bottom:1px solid var(--border); }
+  th { color:var(--muted); font-weight:600; font-size:11px; text-transform:uppercase; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; background:rgba(238,77,45,.15); color:var(--accent); }
+  .btn { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:13px; cursor:pointer; font-weight:600; }
+  .btn:hover { opacity:.9; }
+  .form { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:8px; margin-bottom:12px; }
+  input,select { background:#0F0F12; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-size:13px; }
+  .chart { height:120px; display:flex; align-items:flex-end; gap:6px; padding-top:8px; }
+  .bar { flex:1; background:linear-gradient(180deg,var(--accent),var(--gold)); border-radius:4px 4px 0 0; min-height:4px; position:relative; }
+  .bar span { position:absolute; bottom:-18px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--muted); }
+</style>
+</head>
+<body>
+  <h1>📊 Dashboard de métricas</h1>
+  <p class="sub">Acompanhamento de cliques, vendas e engajamento — Achadinhos Shopee/ML</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Cliques (7d)</div><div class="value" id="kClicks">0</div><div class="delta">+0% vs semana anterior</div></div>
+    <div class="kpi"><div class="label">Vendas (7d)</div><div class="value" id="kSales">0</div><div class="delta">conversão: 0%</div></div>
+    <div class="kpi"><div class="label">Comissão (R$)</div><div class="value" id="kComm">0,00</div><div class="delta">meta: R$ 500</div></div>
+    <div class="kpi"><div class="label">Engajamento</div><div class="value" id="kEng">0</div><div class="delta">curtidas + comentários + compart.</div></div>
+    <div class="kpi"><div class="label">Seguidores</div><div class="value" id="kFollowers">0</div><div class="delta">crescimento semanal</div></div>
+    <div class="kpi"><div class="label">Posts publicados</div><div class="value" id="kPosts">0</div><div class="delta">cadência anti-flood</div></div>
+  </div>
+
+  <div class="section">
+    <h2>📈 Cliques por dia (últimos 7 dias)</h2>
+    <div class="chart" id="chart"></div>
+  </div>
+
+  <div class="section">
+    <h2>➕ Registrar postagem</h2>
+    <div class="form">
+      <input id="fTitle" placeholder="Título do post">
+      <select id="fPlatform"><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>Telegram</option><option>WhatsApp</option><option>Kwai</option></select>
+      <input id="fClicks" type="number" placeholder="Cliques">
+      <button class="btn" onclick="addPost()">Adicionar</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📋 Histórico de postagens</h2>
+    <table>
+      <thead><tr><th>Data</th><th>Plataforma</th><th>Título</th><th>Cliques</th><th>Vendas</th><th>Ações</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+<script>
+  const KEY = 'achadinhos_metrics_v1';
+  function load() { return JSON.parse(localStorage.getItem(KEY) || '{"posts":[]}'); }
+  function save(s) { localStorage.setItem(KEY, JSON.stringify(s)); }
+  let state = load();
+
+  function render() {
+    const posts = state.posts;
+    const clicks = posts.reduce((a,p)=>a+(p.clicks||0),0);
+    const sales = posts.reduce((a,p)=>a+(p.sales||0),0);
+    const comm = posts.reduce((a,p)=>a+(p.comm||0),0);
+    document.getElementById('kClicks').textContent = clicks;
+    document.getElementById('kSales').textContent = sales;
+    document.getElementById('kComm').textContent = comm.toFixed(2).replace('.',',');
+    document.getElementById('kEng').textContent = posts.reduce((a,p)=>a+(p.eng||0),0);
+    document.getElementById('kPosts').textContent = posts.length;
+    document.getElementById('kFollowers').textContent = '—';
+
+    const tbody = document.getElementById('tbody');
+    tbody.innerHTML = posts.map((p,i)=>`
+      <tr>
+        <td>${new Date(p.date).toLocaleDateString('pt-BR')}</td>
+        <td><span class="tag">${p.platform}</span></td>
+        <td>${p.title}</td>
+        <td>${p.clicks||0}</td>
+        <td>${p.sales||0}</td>
+        <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="del(${i})">✕</button></td>
+      </tr>`).join('');
+
+    // chart últimos 7 dias
+    const days = [];
+    for (let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(d.toISOString().slice(0,10)); }
+    const vals = days.map(d => posts.filter(p=>p.date.slice(0,10)===d).reduce((a,p)=>a+(p.clicks||0),0));
+    const max = Math.max(...vals,1);
+    document.getElementById('chart').innerHTML = vals.map((v,i)=>`<div class="bar" style="height:${(v/max*100)||4}%"><span>${days[i].slice(8)}</span></div>`).join('');
+  }
+
+  function addPost() {
+    const title = document.getElementById('fTitle').value.trim();
+    if (!title) return alert('Informe o título');
+    state.posts.unshift({ date:new Date().toISOString(), platform:document.getElementById('fPlatform').value, title, clicks:+document.getElementById('fClicks').value||0, sales:0, comm:0, eng:0 });
+    save(state); render();
+    document.getElementById('fTitle').value=''; document.getElementById('fClicks').value='';
+  }
+  function del(i){ if(confirm('Remover?')){ state.posts.splice(i,1); save(state); render(); } }
+
+  render();
+</script>
+</body>
+</html>

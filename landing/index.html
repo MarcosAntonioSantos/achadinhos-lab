@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achadinhos Shopee — Ofertas que valem a pena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F0F12;
+    --card: #1A1A1F;
+    --accent: #EE4D2D;
+    --accent2: #FF6B35;
+    --gold: #FFD60A;
+    --text: #F5F5F7;
+    --muted: #9A9AA3;
+    --border: #2A2A32;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(1200px 600px at 50% -10%, #2A1A14, var(--bg));
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+  .wrap { width: 100%; max-width: 420px; }
+  .profile { text-align: center; margin-bottom: 24px; }
+  .avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px; font-family: 'Anton', sans-serif; font-size: 40px; color: #100;
+    box-shadow: 0 8px 24px rgba(238,77,45,.35);
+  }
+  h1 { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: .5px; }
+  .handle { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .bio { margin-top: 12px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+  .badge {
+    display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 999px;
+    background: rgba(255,214,10,.12); color: var(--gold); font-size: 12px; font-weight: 600;
+  }
+  .links { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+  .link {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; text-decoration: none; color: var(--text);
+    transition: transform .15s, border-color .15s, background .15s;
+  }
+  .link:hover { transform: translateY(-2px); border-color: var(--accent); background: #22222A; }
+  .link .ico { font-size: 22px; }
+  .link .txt { flex: 1; }
+  .link .txt strong { display: block; font-size: 15px; }
+  .link .txt span { font-size: 12px; color: var(--muted); }
+  .link .arrow { color: var(--muted); }
+  .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; color: #fff;
+  }
+  .highlight .txt span { color: rgba(255,255,255,.8); }
+  .footer { text-align: center; margin-top: 28px; font-size: 12px; color: var(--muted); }
+  .footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="profile">
+      <div class="avatar">A</div>
+      <h1>Achadinhos Shopee</h1>
+      <div class="handle">@achadinhos.shopee</div>
+      <p class="bio">Descobri produtos que valem a pena e compartilho com você. Preço baixo, honestidade e curiosidade. 🛒✨</p>
+      <span class="badge">🔥 Ofertas atualizadas todo dia</span>
+    </div>
+
+    <div class="links">
+      <a class="link highlight" href="https://shopee.com.br" target="_blank" rel="noopener">
+        <span class="ico">🛒</span>
+        <span class="txt"><strong>Ofertas de hoje (Shopee)</strong><span>Produtos selecionados com cupom</span></span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link" href="https://www.mercadolivre.com.br" target="_blank" rel="noopener">
+        <span class="ico">📦</span>
+        <span class="txt"><strong>Achados no Mercado Livre</strong><span>Frete grátis e garantia</span></span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link" href="https://www.tiktok.com" target="_blank" rel="noopener">
+        <span class="ico">🎵</span>
+        <span class="txt"><strong>TikTok — vídeos curtos</strong><span>Reviews e unboxings</span></span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link" href="https://www.instagram.com" target="_blank" rel="noopener">
+        <span class="ico">📸</span>
+        <span class="txt"><strong>Instagram — carrosséis</strong><span>Top 5 da semana</span></span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link" href="https://www.youtube.com" target="_blank" rel="noopener">
+        <span class="ico">▶️</span>
+        <span class="txt"><strong>YouTube — reviews completos</strong><span>Vale a pena? (honesto)</span></span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link" href="https://t.me" target="_blank" rel="noopener">
+        <span class="ico">✈️</span>
+        <span class="txt"><strong>Canal no Telegram</strong><span>Ofertas em tempo real</span></span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link" href="https://wa.me" target="_blank" rel="noopener">
+        <span class="ico">💬</span>
+        <span class="txt"><strong>Grupo no WhatsApp</strong><span>Comunidade de achadinhos</span></span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="footer">
+      <p>© Achadinhos Shopee — links de afiliado podem gerar comissão.</p>
+      <p style="margin-top:6px;"><a href="#">Política de privacidade</a> · <a href="#">Contato</a></p>
+    </div>
+  </div>
+</body>
+</html>
